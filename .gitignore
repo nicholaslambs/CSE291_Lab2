@@ -1,2 +1,2 @@
-/spectre
-/flush_reload
+*.o
+cpu.mk

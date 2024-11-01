@@ -1,14 +1,15 @@
 #!/bin/bash
 
 N=100
-
 success_count=0
+
 for i in $(seq 1 $N)
 do
-    # Run the commands and capture the output
-    output=$(make clean; make run)
+    # Navigate to the directory containing the Makefile
+    output=$(cd $HOME/lab2; make clean; make run_spectre)
 
-    # echo "$output"
+    # Uncomment the next line if you want to debug the output
+    echo "$output"
 
     if echo "$output" | grep -q "Load time for secret_array\[47\]:"
     then

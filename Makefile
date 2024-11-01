@@ -1,20 +1,27 @@
 include ./cpu.mk
 
-all: flush_reload spectre
+TARGETS = flush_reload.o spectre.o
 
-run_flush: flush_reload
-	@taskset -c $(SENDER_CPU) ./flush_reload
+CC = gcc
+CFLAGS = -I.
 
-run_spectre: spectre
-	@taskset -c $(SENDER_CPU) ./spectre
+all: $(TARGETS)
 
-flush_reload: flush_reload.c Makefile
-	@gcc flush_reload.c -o flush_reload
+# Rules to build object files
+flush_reload.o: ./flush+reload/flush_reload.c utility.h
+	$(CC) $(CFLAGS) ./flush+reload/flush_reload.c -o flush_reload.o
 
-spectre: spectre.c Makefile
-	@gcc spectre.c -o spectre
+spectre.o: ./spectre/spectre.c utility.h
+	$(CC) $(CFLAGS) ./spectre/spectre.c -o spectre.o
 
+# Run commands
+run_flush: flush_reload.o
+	@taskset -c $(SENDER_CPU) ./flush_reload.o
+
+run_spectre: spectre.o
+	@taskset -c $(SENDER_CPU) ./spectre.o
+
+# Clean up generated files
 .PHONY: clean
-
 clean:
-	rm -f flush_reload spectre
+	rm -f flush_reload.o spectre.o

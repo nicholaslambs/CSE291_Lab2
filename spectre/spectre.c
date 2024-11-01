@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
         //** STEP 2: Mistrain the branch predictor by calling victim function here */
         // To prevent any kind of patterns, ensure each time you train it a different number of times
         int num_train = rand() % (400 - 300 + 1) + 300;
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5; i++) {
             victim_part2(secret_array, i % limit);
         }
 
