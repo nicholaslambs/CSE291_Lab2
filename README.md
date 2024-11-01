@@ -1,10 +1,11 @@
 # UCSD_CSE_291G_Lab2
 
 There is only one submission for Lab 2. This will contain:
-    - Your explanation on how you set up a simple `flush+reload` covert channel.
-    - Your explanation on how you set up a simple `spectre` attack.
-    - Your answers to the 2 discussion questions.
-    - If you are unable to set up a working spectre attack, please try to show your flush+reload code works with a simple victim function that loads a memory value non-speculatively.
+
+- Explanation on how you set up a simple `flush+reload` covert channel.
+- Explanation on how you set up a simple `spectre` attack.
+- Answers to the 2 discussion questions.
+- If you are unable to set up a working `spectre` attack, please try to show your `flush+reload` code works with a simple victim function that loads a memory value non-speculatively.
 
 ## Discussion Question 1
 
