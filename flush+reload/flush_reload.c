@@ -36,9 +36,7 @@ int main(int argc, char **argv) {
     //** STEP 2: Flush Phase - Clear cache using clflsuh from utility.h */
     // We need to flush out every line and ensure that the line doesn't exist in any way in the cache as well
     for (int i = 0; i < L1_CACHE_LINES; i++) {
-        // increment by # of ints that can fit in each line
-        size_t mem_index = (size_t)(i * NUM_INTS_IN_LINE);
-        clflush(&secret_array[mem_index]);
+        clflush(&secret_array[i * NUM_INTS_IN_LINE]);
     }
 
     //** STEP 3: Victim Load Phase - Load value(s) from HugePage to the cache */
@@ -47,17 +45,9 @@ int main(int argc, char **argv) {
     //** STEP 4: Reload mmap to see load times */
     uint64_t result[L1_CACHE_LINES] = {0};
     for (int i = 0; i < L1_CACHE_LINES; i++) {
-        size_t mem_index = (size_t)(i * NUM_INTS_IN_LINE);
-        result[i] = measure_one_block_access_time((uint64_t)&secret_array[mem_index]);
-    }
-    
-    // Now, we have the load times for EACH LINE in the cache
-    
-    // STEP 5: Print out the cache load times
-    for (int i = 0; i < L1_CACHE_LINES; i++) {
-        if (result[i] < L1_THRESHOLD) {
-            printf("Load time for secret_array[%d]: %ld (hit)\n", i, result[i]);
-            // Get possible entries of cache line to expose the secret data
+        uint64_t time = measure_one_block_access_time((uint64_t)&secret_array[i * NUM_INTS_IN_LINE]);
+        if (time < L1_THRESHOLD) {
+            printf("Load time for line %d: %ld cycles\n", i, time);
             for (int entry = 0; entry < NUM_INTS_IN_LINE; entry++) {
                 printf("secret_array[%ld]: %d\n", i * NUM_INTS_IN_LINE + entry, secret_array[i * NUM_INTS_IN_LINE + entry]);
             }
